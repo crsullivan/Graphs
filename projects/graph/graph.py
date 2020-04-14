@@ -41,22 +41,14 @@ class Graph:
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        # Create a q and enqueue starting vertex
         qq = Queue()
         qq.enqueue([starting_vertex])
-        # Create a set of traversed vertices
         visited = set()
-        # While queue is not empty:
         while qq.size() > 0:
-            # dequeue/pop the first vertex
             path = qq.dequeue()
-            # if not visited
             if path[-1] not in visited:
-                # DO THE THING!!!!!!!
                 print(path[-1])
-                # mark as visited
                 visited.add(path[-1])
-                # enqueue all neightbors
                 for next_vert in self.get_neighbors(path[-1]):
                     new_path = list(path)
                     new_path.append(next_vert)
@@ -128,7 +120,6 @@ class Graph:
         depth-first order.
         """
         s = Stack()
-        # why am I using [starting_vertex] instead of starting_vertex?
         s.push([starting_vertex])
         visited = set()
 
@@ -166,8 +157,6 @@ class Graph:
             for neighbor in self.get_neighbors(current_vertex):
                 copy = path.copy() 
                 if neighbor not in visited: 
-                    # MISTAKE HERE - NEIGHBOR instead of Current_vertex AND COPY instead of path or path.copy!! 
-                    # YOU MUST COPY THE PATH
                     new_path = self.dfs_recursive(neighbor, destination_vertex, visited, copy)
                     if new_path:
                         return new_path 
