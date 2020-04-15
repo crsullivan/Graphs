@@ -1,3 +1,5 @@
+import random
+from util import Queue
 class User:
     def __init__(self, name):
         self.name = name
@@ -21,33 +23,59 @@ class SocialGraph:
             self.friendships[friend_id].add(user_id)
 
     def add_user(self, name):
-        """
-        Create a new user with a sequential integer ID
-        """
-        self.last_id += 1  # automatically increment the ID to assign the new user
+        self.last_id += 1
         self.users[self.last_id] = User(name)
         self.friendships[self.last_id] = set()
 
     def populate_graph(self, num_users, avg_friendships):
+   
+            # Reset graph
+            self.last_id = 0
+            self.users = {}
+            self.friendships = {}
+            # !!!! IMPLEMENT ME
+
+            # Add users
+            # Use add_user num_users times
+
+            # Create friendships
+            for i in range(0, num_users):
+                self.add_user(f"User {i+1}")
+
+            # Generate all friendship combinations
+            possible_friendships =  []
+
+            # Avoid dupes by making sure first number is smaller than second
+            for user_id in self.users:
+                for friend_id in range(user_id+1, self.last_id+1):
+                    possible_friendships.append((user_id, friend_id))
+
+            # Shuffle all possible friendships
+            random.shuffle(possible_friendships)
+
+            # Create for first X pairs x is total //2
+            for i in range(num_users * avg_friendships // 2):
+                friendship = possible_friendships[i]
+                self.add_friendship(friendship[0], friendship[1])
+
+            # * Hint 1: To create N random friendships, you could create a
+            # list with all possible friendship combinations, shuffle the
+            # list, then grab the first N elements from the list. You will
+            # need to `import random` to get shuffle.
+            # * Hint 2: `add_friendship(1, 2)` is the same as
+            # `add_friendship(2, 1)`. You should avoid calling one after
+            # the other since it will do nothing but print a warning. You
+            # can avoid this by only creating friendships where user1 < user2.
+
+    def get_neighbors(self, user_id):
         """
-        Takes a number of users and an average number of friendships
-        as arguments
-
-        Creates that number of users and a randomly distributed friendships
-        between those users.
-
-        The number of users must be greater than the average number of friendships.
+        Get all neighbors (edges) of a vertex.
         """
-        # Reset graph
-        self.last_id = 0
-        self.users = {}
-        self.friendships = {}
-        # !!!! IMPLEMENT ME
-
-        # Add users
-
-        # Create friendships
-
+        if user_id in self.users:
+            return self.users[user_id]
+        else:
+            return None
+    
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
@@ -59,7 +87,19 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
-        return visited
+        qq = Queue()
+        qq.enqueue([user_id])
+        visited = set()
+        while qq.size() > 0:
+            path = qq.dequeue()
+            if path[-1] not in visited:
+                print(path[-1])
+                visited.add(path[-1])
+                for next_vert in self.get_neighbors(path[-1]):
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    qq.enqueue(new_path)
+        return 'visited', visited
 
 
 if __name__ == '__main__':
