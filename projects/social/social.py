@@ -67,14 +67,6 @@ class SocialGraph:
             # the other since it will do nothing but print a warning. You
             # can avoid this by only creating friendships where user1 < user2.
 
-    def get_neighbors(self, user_id):
-        """
-        Get all neighbors (edges) of a vertex.
-        """
-        if user_id in self.users:
-            return self.users[user_id]
-        else:
-            return None
     
     def get_all_social_paths(self, user_id):
         """
@@ -87,24 +79,22 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
-        qq = Queue()
-        qq.enqueue([user_id])
-        visited = set()
-        while qq.size() > 0:
-            path = qq.dequeue()
-            if path[-1] not in visited:
-                print(path[-1])
-                visited.add(path[-1])
-                for next_vert in self.get_neighbors(path[-1]):
-                    new_path = list(path)
-                    new_path.append(next_vert)
-                    qq.enqueue(new_path)
-        return 'visited', visited
-
+        visited[user_id] = [user_id]
+        q = Queue()
+        q.enqueue([user_id])
+        while q.size() > 0:
+            user_path = q.dequeue()
+            last_user = user_path[-1]
+            for friend in self.friendships[last_user]:
+                if friend not in visited:
+                    new_path = list(user_path) + [friend]
+                    q.enqueue(new_path)
+                    visited[friend] = new_path
+        return visited
 
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
-    print(sg.friendships)
+    print('friends', sg.friendships)
     connections = sg.get_all_social_paths(1)
-    print(connections)
+    print('connections', connections)
