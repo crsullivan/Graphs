@@ -77,20 +77,53 @@ class SocialGraph:
 
         The key is the friend's ID and the value is the path.
         """
-        visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
-        visited[user_id] = [user_id]
-        q = Queue()
-        q.enqueue([user_id])
-        while q.size() > 0:
-            user_path = q.dequeue()
-            last_user = user_path[-1]
-            for friend in self.friendships[last_user]:
-                if friend not in visited:
-                    new_path = list(user_path) + [friend]
-                    q.enqueue(new_path)
-                    visited[friend] = new_path
+        # visited = {}  # Note that this is a dictionary, not a set
+        # # !!!! IMPLEMENT ME
+        # visited[user_id] = [user_id]
+        # q = Queue()
+        # q.enqueue([user_id])
+        # while q.size() > 0:
+        #     user_path = q.dequeue()
+        #     last_user = user_path[-1]
+        #     for friend in self.friendships[last_user]:
+        #         if friend not in visited:
+        #             new_path = list(user_path) + [friend]
+        #             q.enqueue(new_path)
+        #             visited[friend] = new_path
+        # return visited
+# ////////////////////////////////////////////////////////////////////////////////////
+        # class solution
+        # shortest - tells us breadth first
+        # extended network tells us traversal, connected component
+        
+        # how are we gonna build a graph? done
+        # start at a given user id, do a bft, return the path to each friend
+        qq = Queue()
+        # create queue         
+        # enqueue path
+        qq.enqueue([user_id])
+        # create visited
+
+        visited = {}
+        # add to visited while queue is not empty
+        while qq.size() > 0:
+        # dequeue firstm path
+            path = qq.dequeue()
+            vertex = path[-1]
+        # if not visited
+            if vertex not in visited:
+            # do thing
+                visited[vertex] = path
+            # add to visited
+            # for each neighbor 
+                for neighbor in self.friendships[vertex]:
+                    # copy path and enqueue
+                    new_path = path.copy()
+                    new_path.append(neighbor)
+                    qq.enqueue(new_path)
+
         return visited
+
 
 if __name__ == '__main__':
     sg = SocialGraph()

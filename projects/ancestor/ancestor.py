@@ -43,28 +43,9 @@ def earliest_ancestor(ancestors, starting_node):
     for pair in ancestors:
         graph.add_vertex(pair[0])
         graph.add_vertex(pair[1])
-        # graph.add_edge(pair[0], pair[1])
     for pair in ancestors:
         graph.add_edge(pair[1], pair[0])
     print('starting neighbors', graph.get_neighbors(starting_node))
-
-    # s = Stack()
-    # s.push(starting_node)
-    # visited = set()
-
-    # while s.size() > 0: 
-    #     v = s.pop()
-    #     if v not in visited:
-    #         print(v)
-    #         visited.add(v)
-    #         for neighbor in graph.get_neighbors(v):
-    #             s.push(neighbor)
-
-   
-   
-   
-   
-   
     s = Stack()
     s.push(starting_node)
     visited = set()
@@ -88,30 +69,3 @@ def earliest_ancestor(ancestors, starting_node):
         if path[-1] in graph.get_neighbors(path[-3]) and path[-2] in graph.get_neighbors(path[-3]):
             return min(graph.get_neighbors(path[-3]))
     return final
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    # print("starting", starting_node)
-    # print("ancestors", ancestors)
-    # pairs = []
-    # for pair in ancestors:
-    #     if starting_node in pair:
-    #         pairs.append(pair)
-    #         print('pairs', pairs)
-    # # last_pair = pairs[-1:]
-    # # print('last_pair', last_pair)
-    # # last_ancestor = last_pair[0]
-    # # print('last_ancestor', last_ancestor[0])
-    # # if last_ancestor[0] == starting_node:\
-    # #     return -1
-    # # return last_ancestor[0]
